@@ -12,19 +12,26 @@ def save_jsonl(jsonl_file, output_dir):
 #  open each JSON file in a folder, extract a table from the file and save it as a text file
 from bs4 import BeautifulSoup
 
-def extract_tables(json_folder, output_folder):
-    for filename in os.listdir(json_folder):
-        if filename.endswith('.json'):
-            with open(os.path.join(json_folder, filename), 'r') as f:
-                data = json.load(f)
-                html = data['html']
-                soup = BeautifulSoup(html, 'html.parser')
-                table = soup.find('table')
-                output_file = os.path.join(output_folder, f'{filename}.txt')
-                with open(output_file, 'w') as f:
-                    for row in table.find_all('tr'):
-                        f.write('\t'.join(cell.text for cell in row.find_all(['td', 'th'])) + '\n')
 
 save_jsonl('tables.jsonl','json_dataset')
 
-extract_tables('json_dataset','table_output')
+from bs4 import BeautifulSoup
+
+input_folder = 'json_dataset'
+output_folder = 'table_output'
+
+for filename in os.listdir(input_folder):
+    if filename.endswith('.json'):
+        input_file = os.path.join(input_folder, filename)
+        with open(input_file, 'r') as f:
+            data = json.load(f)
+            if 'html' in data:
+                soup = BeautifulSoup(data['html'], 'html.parser')
+                tables = soup.find_all('table')
+                for i, table in enumerate(tables):
+                    output_file = f'{output_folder}/{filename}_table_{i}.txt'
+                    with open(output_file, 'w') as f:
+                        for row in table.find_all('tr'):
+                            cells = row.find_all(['th', 'td'])
+                            row_text = [cell.get_text(strip=True) for cell in cells]
+                            f.write('\t'.join(row_text) + '\n')
