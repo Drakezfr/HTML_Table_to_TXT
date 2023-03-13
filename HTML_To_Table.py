@@ -10,8 +10,6 @@ def save_jsonl(jsonl_file, output_dir):
                 json.dump(data, f)
 
 #  open each JSON file in a folder, extract a table from the file and save it as a text file
-import json
-import os
 from bs4 import BeautifulSoup
 
 def extract_tables(json_folder, output_folder):
@@ -27,6 +25,6 @@ def extract_tables(json_folder, output_folder):
                     for row in table.find_all('tr'):
                         f.write('\t'.join(cell.text for cell in row.find_all(['td', 'th'])) + '\n')
 
-save_jsonl('/Users/rui/Documents/Georgetown/Hao/HTML_Table_to_TXT/tables.jsonl','/Users/rui/Documents/Georgetown/Hao/HTML_Table_to_TXT/json_dataset')
+save_jsonl('tables.jsonl','json_dataset')
 
-extract_tables('/Users/rui/Documents/Georgetown/Hao/HTML_Table_to_TXT/json_dataset','/Users/rui/Documents/Georgetown/Hao/HTML_Table_to_TXT/table_output')
+extract_tables('json_dataset','table_output')
