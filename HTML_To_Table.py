@@ -9,12 +9,9 @@ def save_jsonl(jsonl_file, output_dir):
             with open(output_file, 'w') as f:
                 json.dump(data, f)
 
-#  open each JSON file in a folder, extract a table from the file and save it as a text file
-from bs4 import BeautifulSoup
-
-
 save_jsonl('tables.jsonl','json_dataset')
 
+#  open each JSON file in a folder, extract a table from the file and save it as a text file
 from bs4 import BeautifulSoup
 
 input_folder = 'json_dataset'
